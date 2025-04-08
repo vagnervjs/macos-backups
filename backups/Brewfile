@@ -1,0 +1,6 @@
+brew "direnv"
+brew "mackup"
+brew "mas"
+brew "pure"
+brew "tree"
+cask "gitx"
