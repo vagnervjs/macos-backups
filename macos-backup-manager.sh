@@ -5,11 +5,13 @@ BREW_SCRIPT="./brew-backup.sh"
 APPS_SNAPSHOT_SCRIPT="./apps-snapshot.sh"
 DOTFILES_BACKUP_SCRIPT="./dotfiles-backup.sh"
 SSH_BACKUP_SCRIPT="./ssh-backup.sh"
+ITERM_BACKUP_SCRIPT="./iterm2-backup.sh"
+ITERM_RESTORE_SCRIPT="./iterm2-restore.sh"
 
 BACKUP_DIR="${2:-./macos-backup}"
 
 function check_dependencies() {
-    for script in "$MACOS_DEFAULTS_SCRIPT" "$BREW_SCRIPT" "$APPS_SNAPSHOT_SCRIPT" "$DOTFILES_BACKUP_SCRIPT" "$SSH_BACKUP_SCRIPT"; do
+    for script in "$MACOS_DEFAULTS_SCRIPT" "$BREW_SCRIPT" "$APPS_SNAPSHOT_SCRIPT" "$DOTFILES_BACKUP_SCRIPT" "$SSH_BACKUP_SCRIPT" "$ITERM_BACKUP_SCRIPT" "$ITERM_RESTORE_SCRIPT"; do
         if [ ! -x "$script" ]; then
             echo "❌ Missing or non-executable: $script"
             exit 1
@@ -41,6 +43,10 @@ function backup_all() {
     "$SSH_BACKUP_SCRIPT" "$BACKUP_DIR"
     echo "🔐 SSH keys backed up."
 
+    # Backup iTerm2 settings
+    "$ITERM_BACKUP_SCRIPT" "$BACKUP_DIR"
+    echo "🎨 iTerm2 settings backed up."
+
     echo "✅ Full backup complete."
 }
 
@@ -66,6 +72,10 @@ function restore_all() {
     # Restore SSH keys
     "$SSH_BACKUP_SCRIPT" restore "$BACKUP_DIR"
     echo "🔐 SSH keys restored."
+
+    # Restore iTerm2 settings
+    "$ITERM_RESTORE_SCRIPT" "$BACKUP_DIR"
+    echo "🎨 iTerm2 settings restored."
 
     echo "✅ Full restore complete. You may need to log out or reboot for some settings to apply."
 }
